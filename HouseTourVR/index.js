@@ -8,45 +8,13 @@ import {
   View,
   VrButton
 } from 'react-360';
-import connect from './store';
+import { connect, changeRoom } from './store';
 import house from './data/houseData';
 
-export class HouseInfoPanel extends React.Component {
-  state = {
-    room: '',
-    info: '',
-    adjacentRooms: [],
-    img: ''
-  }
-
-  render() {
-    return (
-      <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text>Room Info</Text>
-          <Text>{ this.state.info}</Text>
-        </View>
-      </View>
-    );
-  }
-};
-
 export default class Buttons extends React.Component {
-  state = {
-    room: '',
-    info: '',
-    adjacentRooms: [],
-    img: ''
-  }
 
   clickHandler(roomSelection) {
-    this.setState({
-      room: house[`${roomSelection}`].roomName,
-      info: house[`${roomSelection}`].info,
-      adjacentRooms: house[`${roomSelection}`].adjacentRooms
-    })
-
-    Environment.setBackgroundImage(asset(`./360_${house[`${roomSelection}`].img}`));
+    changeRoom(roomSelection);
   }
 
   createRoomButtons(adjacentRooms) {
@@ -56,8 +24,9 @@ export default class Buttons extends React.Component {
     rooms.map(room => (
       buttons.push(
         <VrButton key={`${room}` + '-button'} onClick={() => this.clickHandler(room)}>
-          <Text style={{backgroundColor: 'green'}}>{ room }</Text>
-        </VrButton>)
+          <Text style={{backgroundColor: 'green'}}> { room } </Text>
+        </VrButton>
+      )
     ));
 
     return buttons;
@@ -65,14 +34,29 @@ export default class Buttons extends React.Component {
 
   render() {
     return (
-      <View style={styles.greetingBox}>
-        <Text>Room Selection</Text>
-        <Text>{ this.props.room }</Text>
-        { this.createRoomButtons(this.props.adjacentRooms) }
+      <View style={styles.panel}>
+        <View style={styles.greetingBox}>
+          <Text style={styles.greeting}> Room Selection</Text>
+          <Text> { this.props.room } </Text>
+          { this.createRoomButtons(this.props.adjacentRooms)}
+        </View>
       </View>
     );
   }
-}
+};
+
+export class HouseInfoPanel extends React.Component {
+  render() {
+    return (
+      <View style={styles.panel}>
+        <View>
+          <Text> Room Info </Text>
+          <Text> { this.props.info } </Text>
+        </View>
+      </View>
+    );
+  }
+};
 
 const ConnectedButtons = connect(Buttons);
 const ConnectedHouseInfoPanel = connect(HouseInfoPanel);
