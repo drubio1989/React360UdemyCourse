@@ -1,4 +1,5 @@
 import React from 'react';
+import { asset, Environment } from 'react-360';
 import house from './data/houseData';
 
 const State = {
@@ -7,13 +8,41 @@ const State = {
   adjacentRooms: []
 }
 
-export default function connect(Component) {
+const listeners = new Set();
+
+function updateComponents() {
+  for (const cb of listeners.values()) {
+    cb();
+  }
+}
+
+export function changeRoom(roomSelection) {
+  let roomName = roomSelection.replace(/\s/g, '');
+
+  State.room = roomName;
+  State.info = house[`${roomName}`].info;
+  State.adjacentRooms = house[`${roomName}`].adjacentRooms;
+
+  Environment.setBackgroundImage(asset(`./360_${house[`${roomName}`].img}`));
+
+  updateComponents();
+}
+
+export function connect(Component) {
   return class Wrapper extends React.Component {
     state = {
       room: State.room,
       info: State.info,
       adjacentRooms: State.adjacentRooms
     };
+
+    _listener = () => {
+      this.setState({
+        room: State.room,
+        info: State.info,
+        adjacentRooms: State.adjacentRooms
+      });
+    }
 
     componentWillMount() {
       if (this.state.room === '') {
@@ -23,6 +52,10 @@ export default function connect(Component) {
           adjacentRooms: house.House.adjacentRooms
         })
       }
+    }
+
+    componentDidMount() {
+      listeners.add(this._listener);
     }
 
     render() {
