@@ -8,9 +8,10 @@ import {
   View,
   VrButton
 } from 'react-360';
+import connect from './store';
 import house from './data/houseData';
 
-export default class HouseTourVR extends React.Component {
+export class HouseInfoPanel extends React.Component {
   state = {
     room: '',
     info: '',
@@ -18,18 +19,27 @@ export default class HouseTourVR extends React.Component {
     img: ''
   }
 
-  componentWillMount() {
-    if (this.state.room === '') {
-      this.setState({
-        room: house.House.roomName,
-        info: house.House.info,
-        adjacentRooms: house.House.adjacentRooms
-      })
-    }
+  render() {
+    return (
+      <View style={styles.panel}>
+        <View style={styles.greetingBox}>
+          <Text>Room Info</Text>
+          <Text>{ this.state.info}</Text>
+        </View>
+      </View>
+    );
+  }
+};
+
+export default class Buttons extends React.Component {
+  state = {
+    room: '',
+    info: '',
+    adjacentRooms: [],
+    img: ''
   }
 
   clickHandler(roomSelection) {
-
     this.setState({
       room: house[`${roomSelection}`].roomName,
       info: house[`${roomSelection}`].info,
@@ -55,20 +65,17 @@ export default class HouseTourVR extends React.Component {
 
   render() {
     return (
-      <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text>Room Selection</Text>
-          <Text>{ this.state.room }</Text>
-          { this.createRoomButtons(house[this.state.room.replace(/\s/g, '')].adjacentRooms) }
-        </View>
-        <View style={styles.greetingBox}>
-          <Text>Room Info</Text>
-          <Text>{ this.state.info}</Text>
-        </View>
+      <View style={styles.greetingBox}>
+        <Text>Room Selection</Text>
+        <Text>{ this.props.room }</Text>
+        { this.createRoomButtons(this.props.adjacentRooms) }
       </View>
     );
   }
-};
+}
+
+const ConnectedButtons = connect(Buttons);
+const ConnectedHouseInfoPanel = connect(HouseInfoPanel);
 
 const styles = StyleSheet.create({
   panel: {
@@ -87,4 +94,5 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('HouseTourVR', () => HouseTourVR);
+AppRegistry.registerComponent('ConnectedButtons', () => ConnectedButtons);
+AppRegistry.registerComponent('ConnectedHouseInfoPanel', () => ConnectedHouseInfoPanel);

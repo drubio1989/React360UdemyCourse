@@ -10,11 +10,36 @@ function init(bundle, parent, options = {}) {
     ...options,
   });
 
+  const buttonsPanel = new Surface(
+    400,
+    550,
+    Surface.SurfaceShape.Flat
+  );
 
-  // Render your app content to the default cylinder surface
+  buttonsPanel.setAngle(
+    -0.6,
+    0.1
+  );
+
   r360.renderToSurface(
-    r360.createRoot('HouseTourVR', { /* initial props */ }),
-    r360.getDefaultSurface()
+    r360.createRoot('ConnectedButtons'),
+    buttonsPanel
+  );
+
+  const infoPanel = new Surface(
+    400,
+    400,
+    Surface.SurfaceShape.Flat
+  );
+
+  infoPanel.setAngle(
+    0.6,
+    0.1
+  );
+
+  r360.renderToSurface(
+    r360.createRoot('ConnectedHouseInfoPanel'),
+    infoPanel
   );
 
   // Load the initial environment
