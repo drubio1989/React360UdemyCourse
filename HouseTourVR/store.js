@@ -17,13 +17,11 @@ function updateComponents() {
 }
 
 export function changeRoom(roomSelection) {
-  let roomName = roomSelection.replace(/\s/g, '');
+  State.room = roomSelection;
+  State.info = house[`${roomSelection}`].info;
+  State.adjacentRooms = house[`${roomSelection}`].adjacentRooms;
 
-  State.room = roomName;
-  State.info = house[`${roomName}`].info;
-  State.adjacentRooms = house[`${roomName}`].adjacentRooms;
-
-  Environment.setBackgroundImage(asset(`./360_${house[`${roomName}`].img}`));
+  Environment.setBackgroundImage(asset(`./360_${house[`${roomSelection}`].img}`));
 
   updateComponents();
 }
