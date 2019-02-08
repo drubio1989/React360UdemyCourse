@@ -3,9 +3,9 @@ import { asset, Environment } from 'react-360';
 import house from './data/houseData';
 
 const State = {
-  room: '',
-  info: '',
-  adjacentRooms: []
+  room: house.House.roomName,
+  info: house.House.info,
+  adjacentRooms: house.House.adjacentRooms,
 }
 
 const listeners = new Set();
@@ -17,7 +17,7 @@ function updateComponents() {
 }
 
 export function changeRoom(roomSelection) {
-  let roomName = roomSelection.replace(/\s/g, '');
+  let roomName = roomSelection;
 
   State.room = roomName;
   State.info = house[`${roomName}`].info;
@@ -41,17 +41,7 @@ export function connect(Component) {
         room: State.room,
         info: State.info,
         adjacentRooms: State.adjacentRooms
-      });
-    }
-
-    componentWillMount() {
-      if (this.state.room === '') {
-        this.setState({
-          room: house.House.roomName,
-          info: house.House.info,
-          adjacentRooms: house.House.adjacentRooms
-        })
-      }
+      })
     }
 
     componentDidMount() {
@@ -59,12 +49,12 @@ export function connect(Component) {
     }
 
     render() {
-      return (
+      return(
         <Component
-          {...this.props}
-          room={this.state.room}
-          info={this.state.info}
-          adjacentRooms={this.state.adjacentRooms}
+        { ...this.props }
+        room={this.state.room}
+        info={this.state.info}
+        adjacentRooms={this.state.adjacentRooms}
         />
       )
     }
