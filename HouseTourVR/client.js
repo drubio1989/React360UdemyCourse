@@ -12,13 +12,13 @@ function init(bundle, parent, options = {}) {
 
   const buttonsPanel = new Surface(
     400,
-    400,
+    600,
     Surface.SurfaceShape.Flat
   );
 
   buttonsPanel.setAngle(
     -0.6,
-    0.1
+    0
   );
 
   r360.renderToSurface(

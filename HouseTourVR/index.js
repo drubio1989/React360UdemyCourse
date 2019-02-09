@@ -3,6 +3,8 @@ import {
   asset,
   AppRegistry,
   Environment,
+  Image,
+  NativeModules,
   StyleSheet,
   Text,
   View,
@@ -10,13 +12,43 @@ import {
 } from 'react-360';
 import { connect, changeRoom } from './store';
 
-export class HouseInfoPanel extends React.Component {
+const { AudioModule } = NativeModules;
+
+class AudioPanel extends React.Component {
+  playAmbientMusic() {
+    AudioModule.playEnvironmental({
+      source: asset('audio/ambient.wav'),
+      volume: 0.3
+    })
+  }
+
+  stopAmbientMusic() {
+    AudioModule.stopEnvironmental();
+  }
+
+  render() {
+    return (
+      <View style={styles.audioPanel}>
+        <VrButton onClick={() => this.playAmbientMusic()}>
+          <Image style={{height:50, width: 50}} source={asset('audioOn.png')} />
+        </VrButton>
+        <VrButton onClick={() => this.stopAmbientMusic()}>
+          <Image style={{height:50, width: 50}} source={asset('audioOff.png')} />
+        </VrButton>
+      </View>
+    );
+  }
+}
+
+class HouseInfoPanel extends React.Component {
   render() {
     return (
       <View>
         <View style={styles.infoPanel}>
           <Text style={styles.header}>Room Info</Text>
-          <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold'}}>{ this.props.info}</Text>
+          <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold'}}>
+            { this.props.info}
+          </Text>
         </View>
       </View>
     );
@@ -65,6 +97,7 @@ export default class ButtonInfoPanel extends React.Component {
         <View style={styles.buttonPanel}>
           <Text style={styles.header}>Room Selection</Text>
           { this.createRoomButtons(this.props.adjacentRooms) }
+          <AudioPanel />
         </View>
       </View>
     );
@@ -75,6 +108,9 @@ const ConnectedButtonInfoPanel = connect(ButtonInfoPanel);
 const ConnectedHouseInfoPanel = connect(HouseInfoPanel);
 
 const styles = StyleSheet.create({
+  audioPanel: {
+    flexDirection: 'row',
+  },
   infoPanel: {
     width: 400,
     height: 400,
@@ -95,6 +131,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center'
+  },
+  audioButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'rgb(0,204,102)',
+    borderColor: 'rgb(255,255,255)',
+    borderWidth: 2,
   },
   button: {
     width: 200,
