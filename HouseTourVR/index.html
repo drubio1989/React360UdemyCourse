@@ -1,23 +1,43 @@
 <html>
-  <head>
+<head>
     <title>HouseTourVR</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>body { margin: 0; }</style>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   </head>
   <body>
     <!-- Attachment point for your app -->
-    <div id="container"></div>
+
+    <div id="initialize">
+      <div id="placeHolder">
+        <div style="background-image:url('http://i63.tinypic.com/23a5b4.jpg');height:100%;background-position:center;background-repeat: no-repeat;background-size: cover;"></div>
+        <div class="container px-md-3 px-sm-0">
+          <div class="col-md-12 mb-4 white-text text-center wow fadeIn">
+            <h3 class="display-3 font-weight-bold white-text mb-0 pt-md-5 pt-5">House Tour VR</h3>
+            <hr>
+            <h4 class="subtext-header mt-2 mb-4">Welcome to House Tour VR. View Real Estate in 360 degrees display through either desktop or headset. Click enter to Begin</h4>
+            <button type="button" class="btn btn-dark" onClick="enterApp();">Enter</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <script src="./client.bundle?platform=vr"></script>
     <script>
       // Initialize the React 360 application
-      React360.init(
-        'index.bundle?platform=vr&dev=true',
-        document.getElementById('container'),
-        {
-          assetRoot: 'static_assets/',
-        }
-      );
+      function enterApp() {
+        React360.init(
+          'index.bundle?platform=vr&dev=true',
+          document.getElementById('initialize'),
+          {
+            assetRoot: 'static_assets/',
+          }
+        );
+
+        const elem = document.getElementById('placeHolder');
+        elem.parentNode.removeChild(elem);
+      }
     </script>
   </body>
 </html>
-
