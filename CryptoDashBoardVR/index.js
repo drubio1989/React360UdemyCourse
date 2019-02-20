@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Text,
   View,
+  VrButton,
 } from 'react-360';
+import connect from './store';
 import Entity from 'Entity';
 
 export default class CryptoModel extends React.Component {
@@ -36,16 +38,14 @@ class LeftPanel extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD`)
+    fetch(`https://min-api.cryptocompare.com/data/histoday?fsym=${this.props.crypto}&tsym=USD`)
     .then(response => response.json())
     .then(data => {
       this.setState({ cryptocurrency: {
-          symbol: `${crypto}`,
-          time: data["Data"][30]["time"],
+          open: data["Data"][30]["open"],
           close: data["Data"][30]["close"],
           high: data["Data"][30]["high"],
           low: data["Data"][30]["low"],
-          open: data["Data"][30]["open"],
           volumefrom: data["Data"][30]["volumefrom"],
           volumeto: data["Data"][30]["volumeto"]
         }
@@ -55,31 +55,34 @@ class LeftPanel extends React.Component {
 
   render() {
     return (
-        <View style={styles.leftPanel}>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Crypto</Text>
-          </View>
-          <View style={{marginTop: 100}}>
-            <Text style={{fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Price Statistics</Text>
-            <Text style={styles.textSize}>
-              High: ${this.state.cryptocurrency.high}
-            </Text>
-            <Text style={styles.textSize}>
-              Low: ${this.state.cryptocurrency.low}
-            </Text>
-            <Text style={styles.textSize}>
-              Open: ${this.state.cryptocurrency.open}
-            </Text>
-            <Text style={styles.textSize}>
-              Close: ${this.state.cryptocurrency.close}
-            </Text>
-            <Text style={styles.textSize}>
-              Volume From: {this.state.cryptocurrency.volumefrom}
-            </Text>
-            <Text style={styles.textSize}>
-              Volume To: {this.state.cryptocurrency.volumeto}
-            </Text>
-          </View>
+      <View style={styles.leftPanel}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Crypto</Text>
+        </View>
+        <View style={{marginTop: 100}}>
+          <Text style={{fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Price Statistics</Text>
+          <Text style={styles.textSize}>
+            High: ${this.state.cryptocurrency.high}
+          </Text>
+          <Text style={styles.textSize}>
+            High: ${this.state.cryptocurrency.high}
+          </Text>
+          <Text style={styles.textSize}>
+            Low: ${this.state.cryptocurrency.low}
+          </Text>
+          <Text style={styles.textSize}>
+            Open: ${this.state.cryptocurrency.open}
+          </Text>
+          <Text style={styles.textSize}>
+            Close: ${this.state.cryptocurrency.close}
+          </Text>
+          <Text style={styles.textSize}>
+            Volume From: {this.state.cryptocurrency.volumefrom}
+          </Text>
+          <Text style={styles.textSize}>
+            Volume To: {this.state.cryptocurrency.volumeto}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -87,34 +90,28 @@ class LeftPanel extends React.Component {
 
 class RightPanel extends React.Component {
   state = {
-    twitter: {
-      following: '',
-      followers: '',
-      link: ''
+    cryptoData: {
+      symbol: '',
+      algorithm: '',
+      proofType: '',
+      blockNumber: '',
+      blockTime: '',
+      blockReward: ''
     },
-    reddit: {
-      link: '',
-      subscribers: ''
-    },
-    facebook: {
-      link: '',
-      likes: ''
-    }
+    hover: false
   };
 
   componentDidMount() {
-    fetch(`https://min-api.cryptocompare.com/data/social/coin/latest?coinId=1182&api_key=1bd0917187334c260db80edb86b250d88a7fe2c3721153a3467742137b6499ba`)
+    fetch(`https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=${this.props.crypto}&tsym=USD&api_key=1bd0917187334c260db80edb86b250d88a7fe2c3721153a3467742137b6499ba`)
       .then(response => response.json())
       .then(data => this.setState({
-        twitter: {
-          following: data["Data"]["Twitter"]["following"],
-          followers: data["Data"]["Twitter"]["followers"]
-        },
-        reddit: {
-          subscribers: data["Data"]["Reddit"]["subscribers"]
-        },
-        facebook: {
-          likes: data["Data"]["Facebook"]["likes"],
+        cryptoData: {
+          symbol: data["Data"][0]["CoinInfo"]["Name"],
+          algorithm: data["Data"][0]["CoinInfo"]["Algorithm"],
+          proofType: data["Data"][0]["CoinInfo"]["ProofType"],
+          blockNumber: data["Data"][0]["CoinInfo"]["BlockNumber"],
+          blockTime: data["Data"][0]["CoinInfo"]["BlockTime"],
+          blockReward: data["Data"][0]["CoinInfo"]["BlockReward"]
         }
       })
     )
@@ -126,16 +123,32 @@ class RightPanel extends React.Component {
         <View style={styles.header}>
           <Text style={styles.headerText}>Information</Text>
         </View>
-        <View style={{marginTop: 125}}>
-          <Text style={styles.socialMediaHeader}>Twitter</Text>
-          <Text style={styles.textSize}>Followers: {this.state.twitter.followers}</Text>
-          <Text style={styles.textSize}>Following: {this.state.twitter.following}</Text>
-
-          <Text style={styles.socialMediaHeader}>Reddit</Text>
-          <Text style={styles.textSize}>Subscribers: {this.state.reddit.subscribers}</Text>
-
-          <Text style={styles.socialMediaHeader}>Facebook</Text>
-          <Text style={styles.textSize}>Likes: {this.state.facebook.likes}</Text>
+        <View>
+          <Text style={styles.textSize}>
+            Symbol: { this.state.cryptoData.symbol }
+          </Text>
+          <Text style={styles.textSize}>
+            Algorithm: { this.state.cryptoData.algorithm }
+          </Text>
+          <Text style={styles.textSize}>
+            Proof Type: { this.state.cryptoData.proofType }
+          </Text>
+          <Text style={styles.textSize}>
+            Block Number: { this.state.cryptoData.blockNumber }
+          </Text>
+          <Text style={styles.textSize}>
+            Block Time: { this.state.cryptoData.blockTime }
+          </Text>
+          <Text style={styles.textSize}>
+            Block Reward: { this.state.cryptoData.blockReward }
+          </Text>
+        </View>
+        <View>
+          <VrButton style={this.state.hover ? styles.hover : styles.button}
+                    onEnter={() => this.setState({hover: true})}
+                    onExit={() => this.setState({hover: false})}>
+            <Text style={styles.textSize}>Next</Text>
+          </VrButton>
         </View>
       </View>
     );
@@ -159,6 +172,7 @@ const styles = StyleSheet.create({
     borderColor: '#003459',
     borderWidth: 10,
     flexDirection: 'column',
+    justifyContent: 'space-between',
     padding: 10,
   },
   header: {
@@ -173,12 +187,33 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center'
   },
-  socialMediaHeader: {
+  infoHeader: {
     textAlign: 'center',
     fontWeight: 'bold'
   },
+  button: {
+    height: 60,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: '#0EB1D2',
+    borderColor: 'rgb(255,255,255)',
+    borderWidth: 2.5
+  },
+  hover: {
+    height: 60,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: '#0073B7',
+    borderColor: 'rgb(255,255,255)',
+    borderWidth: 2.5,
+  },
 });
 
-AppRegistry.registerComponent('LeftPanel', () => LeftPanel);
-AppRegistry.registerComponent('RightPanel', () => RightPanel);
-AppRegistry.registerComponent('CryptoModel', () => CryptoModel);
+const ConnectedLeftPanel = connect(LeftPanel);
+const ConnectedRightPanel = connect(RightPanel);
+const ConnectedCryptoModel = connect(CryptoModel);
+
+
+AppRegistry.registerComponent('ConnectedLeftPanel', () => ConnectedLeftPanel);
+AppRegistry.registerComponent('ConnectedRightPanel', () => ConnectedRightPanel);
+AppRegistry.registerComponent('ConnectedCryptoModel', () => ConnectedCryptoModel);
