@@ -1,12 +1,16 @@
 import React from 'react';
 import {
   Animated,
+  asset,
+  NativeModules,
   Text,
   View,
-  VrButton,
+  VrButton
 } from 'react-360';
 import { connect, nextCrypto } from './store';
 import styles from './stylesheet';
+
+const { AudioModule } = NativeModules;
 
 class RightPanel extends React.Component {
   state = {
@@ -58,6 +62,10 @@ class RightPanel extends React.Component {
 
   clickHandler(index) {
     nextCrypto(index)
+
+    AudioModule.playOneShot({
+      source: asset('audio/click.wav'),
+    });
   }
 
   render() {
