@@ -13,7 +13,7 @@ function init(bundle, parent, options = {}) {
   // Render your app content to the default cylinder surface
   r360.renderToLocation(
     r360.createRoot('ConnectedCryptoModel', { /* initial props */ }),
-    new Location([0,0,-1.5]),
+    new Location([0,0,-1]),
   );
 
   const leftPanel = new Surface(300, 600, Surface.SurfaceShape.Flat);
