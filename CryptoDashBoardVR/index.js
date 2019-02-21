@@ -7,8 +7,9 @@ import {
   View,
   VrButton,
 } from 'react-360';
-import connect from './store';
+import { connect, nextCrypto } from './store';
 import Entity from 'Entity';
+
 
 export default class CryptoModel extends React.Component {
   render() {
@@ -16,7 +17,7 @@ export default class CryptoModel extends React.Component {
       <View>
         <Entity
           style={{transform: [{scaleX: 1}, {scaleY: 1}, {scaleZ: 1}, {rotateX: 90}]}}
-          source={{obj: asset('models/bitcoin.obj')}}
+          source={{obj: asset(`models/${this.props.crypto}.obj`), mtl: asset(`models/${this.props.crypto}.mtl`)}}
         />
       </View>
     );
@@ -37,8 +38,8 @@ class LeftPanel extends React.Component {
     }
   };
 
-  componentDidMount() {
-    fetch(`https://min-api.cryptocompare.com/data/histoday?fsym=${this.props.crypto}&tsym=USD`)
+  fetchCryptoData(crypto) {
+    fetch(`https://min-api.cryptocompare.com/data/histoday?fsym=${crypto}&tsym=USD`)
     .then(response => response.json())
     .then(data => {
       this.setState({ cryptocurrency: {
@@ -51,6 +52,16 @@ class LeftPanel extends React.Component {
         }
       });
     })
+  }
+
+  componentDidMount() {
+    this.fetchCryptoData(this.props.crypto);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.crypto !== this.props.crypto) {
+      this.fetchCryptoData(this.props.crypto);
+    }
   }
 
   render() {
@@ -101,8 +112,8 @@ class RightPanel extends React.Component {
     hover: false
   };
 
-  componentDidMount() {
-    fetch(`https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=${this.props.crypto}&tsym=USD&api_key=1bd0917187334c260db80edb86b250d88a7fe2c3721153a3467742137b6499ba`)
+  fetchCryptoData(crypto) {
+    fetch(`https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=${crypto}&tsym=USD&api_key=1bd0917187334c260db80edb86b250d88a7fe2c3721153a3467742137b6499ba`)
       .then(response => response.json())
       .then(data => this.setState({
         cryptoData: {
@@ -115,6 +126,20 @@ class RightPanel extends React.Component {
         }
       })
     )
+  }
+
+  componentDidMount() {
+    this.fetchCryptoData(this.props.crypto);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.crypto !== this.props.crypto) {
+      this.fetchCryptoData(this.props.crypto);
+    }
+  }
+
+  clickHandler(index) {
+    nextCrypto(index)
   }
 
   render() {
@@ -146,7 +171,8 @@ class RightPanel extends React.Component {
         <View>
           <VrButton style={this.state.hover ? styles.hover : styles.button}
                     onEnter={() => this.setState({hover: true})}
-                    onExit={() => this.setState({hover: false})}>
+                    onExit={() => this.setState({hover: false})}
+                    onClick={() => this.clickHandler(this.props.index)}>
             <Text style={styles.textSize}>Next</Text>
           </VrButton>
         </View>
