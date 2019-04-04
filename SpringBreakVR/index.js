@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-360';
 import InfoButton from './components/InfoButton';
+import Promo from './components/Promo';
 
 const SCENES = ['Promo', 'Events', 'Rockstar Beach'];
 
@@ -17,10 +18,30 @@ class Scene extends React.Component {
     scene: ''
   }
 
-  clickHandler(selection) {}
+  componentDidMount() {
+    Environment.setBackgroundImage(asset('chilling.jpg'), { rotateTransform: [{rotateY: '180deg'}] });
+  }
+
+  clearMedia() {
+    Environment.clearBackground();
+  }
+
+  clickHandler(selection) {
+    this.setState({
+      scene: selection
+    })
+
+    this.clearMedia();
+  }
 
   render() {
+    const scene = this.state.scene;
+    let selection;
     const sceneButtons = [];
+
+    if (scene === 'Promo') {
+      selection = <Promo />;
+    }
 
     for (let i in SCENES) {
       sceneButtons.push(
@@ -36,6 +57,7 @@ class Scene extends React.Component {
     return(
       <View style={styles.panel}>
         <View>
+          {selection}
         </View>
         <View style={styles.section}>
           {sceneButtons}
