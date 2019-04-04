@@ -1,43 +1,69 @@
 import React from 'react';
 import {
   AppRegistry,
+  asset,
+  Environment,
+  NativeModules,
   StyleSheet,
   Text,
   View,
 } from 'react-360';
+import InfoButton from './components/InfoButton';
 
-export default class SpringBreakVR extends React.Component {
+const SCENES = ['Promo', 'Events', 'Rockstar Beach'];
+
+class Scene extends React.Component {
+  state = {
+    scene: ''
+  }
+
+  clickHandler(selection) {}
+
   render() {
-    return (
+    const sceneButtons = [];
+
+    for (let i in SCENES) {
+      sceneButtons.push(
+        <InfoButton
+          key={i}
+          style={styles.button}
+          source={asset('palm-tree.png')}
+          text={SCENES[i]}
+          onClick={() => { this.clickHandler(SCENES[i])}}
+        />)
+    }
+
+    return(
       <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text style={styles.greeting}>
-            Welcome to React 360
-          </Text>
+        <View>
+        </View>
+        <View style={styles.section}>
+          {sceneButtons}
         </View>
       </View>
-    );
+    )
   }
-};
+}
 
 const styles = StyleSheet.create({
   panel: {
-    // Fill the entire surface
-    width: 1000,
-    height: 600,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 800,
+    height: 450,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
-  greetingBox: {
-    padding: 20,
-    backgroundColor: '#000000',
-    borderColor: '#639dda',
-    borderWidth: 2,
+  section: {
+    padding: 10,
+    backgroundColor: '#FFE500',
+    borderColor: '#ED8B00',
+    borderWidth: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
-  greeting: {
-    fontSize: 30,
-  },
+  button: {
+    marginLeft: 5,
+    marginRight: 5,
+  }
 });
 
-AppRegistry.registerComponent('SpringBreakVR', () => SpringBreakVR);
+AppRegistry.registerComponent('Scene', () => Scene);
