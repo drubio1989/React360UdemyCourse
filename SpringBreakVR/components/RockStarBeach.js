@@ -8,7 +8,7 @@ import {
 import VideoModule from 'VideoModule';
 
 export default class RockStarBeach extends React.Component {
-  rockStarBeachVideo = VideoModule.createPlayer('nightlife');
+  rockStarBeachVideo = VideoModule.createPlayer('rockstar');
 
   componentDidMount() {
 
@@ -17,7 +17,7 @@ export default class RockStarBeach extends React.Component {
       muted: false
     });
 
-    Environment.setBackgroundVideo('nightlife', { rotateTransform: [{rotateY: '180deg'}] });
+    Environment.setBackgroundVideo('rockstar', { rotateTransform: [{rotateY: '180deg'}] });
   }
 
   componentWillUnmount() {
