@@ -10,6 +10,7 @@ import {
 } from 'react-360';
 import InfoButton from './components/InfoButton';
 import Promo from './components/Promo';
+import Events from './components/Events';
 import RockStarBeach from './components/RockStarBeach';
 
 const SCENES = ['Promo', 'Events', 'Rockstar Beach'];
@@ -42,8 +43,10 @@ class Scene extends React.Component {
 
     if (scene === 'Promo') {
       selection = <Promo />;
+    } else if (scene === 'Events') {
+      selection = <Events />;
     } else if (scene === 'Rockstar Beach') {
-      selection = <RockStarBeach />
+      selection = <RockStarBeach />;
     }
 
     for (let i in SCENES) {
@@ -54,7 +57,8 @@ class Scene extends React.Component {
           source={asset('palm-tree.png')}
           text={SCENES[i]}
           onClick={() => { this.clickHandler(SCENES[i])}}
-        />)
+        />
+      )
     }
 
     return(
