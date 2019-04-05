@@ -10,6 +10,7 @@ import {
 } from 'react-360';
 import InfoButton from './components/InfoButton';
 import Promo from './components/Promo';
+import RockStarBeach from './components/RockStarBeach';
 
 const SCENES = ['Promo', 'Events', 'Rockstar Beach'];
 
@@ -41,6 +42,8 @@ class Scene extends React.Component {
 
     if (scene === 'Promo') {
       selection = <Promo />;
+    } else if (scene === 'Rockstar Beach') {
+      selection = <RockStarBeach />
     }
 
     for (let i in SCENES) {

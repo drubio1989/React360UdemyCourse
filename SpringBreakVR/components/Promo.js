@@ -28,6 +28,12 @@ export default class Promo extends React.Component {
   }
 
   componentWillUnmount() {
+    Environment.setScreen(
+      'default', /* screen name */
+      null, /* player unique id */
+      'main', /* surface name */
+      0, 0, 800, 450 /* relative position on the surface */
+    );
     this.promoVideo.destroy();
   }
 
