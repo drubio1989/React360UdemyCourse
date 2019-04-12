@@ -5,16 +5,42 @@ import {
   Text,
   View,
 } from 'react-360';
+import GazeButton from "react-360-gaze-button";
+
+class SimpleButton extends React.Component {
+  state = {
+    gazed: false
+  };
+
+  setGazed = () => {
+    this.setState({ gazed: true });
+  };
+
+  render() {
+    const { gazed } = this.state;
+    return(
+      <View>
+        <GazeButton
+          duration={3000}
+          onClick={this.setGazed}
+          render={(remainingTime, isGazed) => (
+            <View style={styles.greetingBox}>
+              <Text style={styles.greeting}>
+                {gazed ? "You have gazed me" : isGazed ? remainingTime : "Gaze me"}
+              </Text>
+            </View>
+          )}
+        />
+      </View>
+    )
+  }
+}
 
 export default class MobileVR extends React.Component {
   render() {
     return (
       <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text style={styles.greeting}>
-            Welcome to React 360
-          </Text>
-        </View>
+        <SimpleButton />
       </View>
     );
   }
