@@ -54,7 +54,7 @@ export default class Events extends React.Component {
   componentWillUnmount() {
     AudioModule.stopEnvironmental();
   }
-  
+
   _prevPhoto = () => {
     let next = this.state.index - 1;
     if (next < 0) {
@@ -67,11 +67,6 @@ export default class Events extends React.Component {
     const current = PHOTOS[
       this.state.index % PHOTOS.length
     ];
-
-    AudioModule.playEnvironmental({
-      source: asset(`audio/${current.audio}`),
-      volume: 0.3, // play at 3/10 original volume
-    });
   };
 
   _nextPhoto = () => {
@@ -87,12 +82,6 @@ export default class Events extends React.Component {
     const current = PHOTOS[
       this.state.index % PHOTOS.length
     ];
-
-    AudioModule.playEnvironmental({
-
-      source: asset(`audio/${current.audio}`),
-      volume: 0.3, // play at 3/10 original volume
-    });
   };
 
 
