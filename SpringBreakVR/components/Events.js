@@ -51,12 +51,16 @@ export default class Events extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    AudioModule.stopEnvironmental();
+  }
+  
   prevPhoto = () => {
     let next = this.state.index - 1;
     if (next < 0) {
       next += PHOTOS.length;
     }
-    
+
     this.setState({
       index: next,
     });
