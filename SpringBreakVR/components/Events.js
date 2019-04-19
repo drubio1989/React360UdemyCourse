@@ -51,6 +51,10 @@ export default class Events extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    AudioModule.stopEnvironmental();
+  }
+  
   _prevPhoto = () => {
     let next = this.state.index - 1;
     if (next < 0) {
@@ -91,9 +95,8 @@ export default class Events extends React.Component {
     });
   };
 
+
   render() {
-
-
     const current = PHOTOS[
       this.state.index % PHOTOS.length
     ];
